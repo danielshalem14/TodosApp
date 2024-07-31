@@ -12,5 +12,34 @@ namespace TodosApp.Controllers
             List<Todo> todos = Data.Get.Todos.Include(todo => todo.Teammate).ToList();
             return View(todos);
         }
+
+        public IActionResult ToggleIsCompleted(int id)
+        {
+            Todo? todoFromDb = Data.Get.Todos.FirstOrDefault(todo => todo.Id == id);
+
+            if (todoFromDb == null)
+            {
+                return NotFound();
+            }
+
+            todoFromDb.IsCompleted = !todoFromDb.IsCompleted;
+            Data.Get.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteTodo(int id)
+        {
+            Todo? todoFromDb = Data.Get.Todos.FirstOrDefault(todo => todo.Id == id);
+
+            if (todoFromDb == null)
+            {
+                return NotFound();
+            }
+
+            Data.Get.Todos.Remove(todoFromDb);
+            Data.Get.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

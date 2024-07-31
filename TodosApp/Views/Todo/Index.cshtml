@@ -22,7 +22,6 @@
                 @Html.DisplayNameFor(model => model.IsCompleted)
             </th>
             <th>
-                @* @Html.DisplayNameFor(model => model.Teammate) *@
                 Teammate Name
             </th>
             <th>Action links</th>
@@ -39,15 +38,26 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
+                    <form asp-action="ToggleIsCompleted">
+                        <input hidden="hidden" name="Id" value="@item.Id" />
+                        <input 
+                            type="checkbox" 
+                            name="IsCompleted" 
+                            class="form-check-input" 
+                            onchange="this.form.submit()" 
+                            @(item.IsCompleted ? "checked" : "")
+                            />
+                    </form>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Teammate.Name)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <form asp-action="DeleteTodo" method="delete">
+                        <input hidden="hidden" name="Id" value="@item.Id" />
+                        <input type="submit" name="Id" class="btn-danger" value="X" />
+                    </form>
+                    @* @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
                 </td>
             </tr>
         }
